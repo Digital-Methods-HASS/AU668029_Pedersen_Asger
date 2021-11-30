@@ -1,0 +1,162 @@
+---
+title: "Homework Week 47"
+author: "Asger Kammer Pedersen"
+date: " 2021/11/30"
+output: 
+  html_document:
+      toc: TRUE
+      toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r library}
+library(tidyverse)
+```
+
+
+
+```{r data}
+Western_Europe <- read_csv("Data/homicide-rates-across-western-europe.csv")
+```
+
+
+
+```{r}
+names(Western_Europe)[1] <- 'Country'
+```
+
+# Homework Week 47
+
+```{r }
+ggplot(data = Western_Europe) + 
+  geom_smooth(mapping = aes(x = Year, 
+                           y = Western_Europe$Homicide_per_100k, 
+                           color = Country)) +
+  labs(x = "Year",
+       y = "Number of Homicides per 100,000 people",
+       title = "Homicide rate in Europe from 1300-2000")
+
+```
+
+
+```{r }
+ggplot(data = Western_Europe) + 
+  geom_line(mapping = aes(x = Year, 
+                           y = Western_Europe$Homicide_per_100k, 
+                           color = Country)) +
+  facet_wrap(~ Country, nrow = 3,ncol = 2) +
+  labs(x = "Year",
+       y = "Homicides per 100,000",
+       title = "Homicide rate in Western Europe from 1300-2000")
+theme(legend.position = "bottom")
+```
+
+```{r}
+
+kings <- read_csv("./Data/Exerxice-1-Ark1.csv")
+kings$Duration <- kings$End_of_Reign-kings$Beginning_of_Reign
+kings[30,1:6]
+kings1 <- kings[-c(30,40),]
+
+mean(kings1$Duration,na.rm=T)
+class(kings1$Duration)
+
+
+kings1 <- kings1 %>% 
+  mutate(midyear = Beginning_of_Reign -(Beginning_of_Reign-End_of_Reign)/2)
+```
+
+
+
+
+
+```{r}
+# YOUR CODE HERE:
+ggplot(kings1, aes(x=midyear,y=Duration))+
+  geom_point()+
+  geom_smooth()+
+  labs(title = "Duration avg. of rule for danish kigns",
+       x="Mid-Year",y="Duration")+
+  theme_bw()+
+  theme(text = element_text(size=16))
+```
+
+
+**Your Tasks:**
+## Task 1
+1) the column name Western_Europe$`Homicide rate in Europe over long-term (per 100,000) is not very easy to work with. Relabel it to 'homicides_per_100k' inside R after loading the dataset and then edit all the ggplots.
+
+ As shown above in the gg_plots 
+
+## Task 2
+2) The basic plot and following facet-plot (combination plot) is great, but geom_point - a scatterplot - is not the best choice for showing long-term data. Can you change both plots to more suitable type of rendering? 
+
+I have chosen geom_smooth and geom_line as possible ways to show render long term data. 
+
+## Task 3
+3) Can you change the facet "layout" to two columns and three rows so that the trends are easier to see? 
+
+Add "ncol = 2" after nrow in the facets 
+
+## Task 4
+4) Move the legend from the current position on the side to below the facets, and label it "Country" instead of "Entity".
+
+Renaming to "Country" instead of "Entity":
+
+names(Western_Europe)[1] <- 'Country' 
+
+Then I renamed the places which had Entity in the plots to Country
+
+I used this code to get the legend to go at the bottom:
+theme(legend.direction = "bottom")
+as was instructed to me by fellow students, but it does not seem to have the desired function. I do not know why it does not work.
+
+## Task 5
+5) Add a floating table of contents to your Rmarkdown document, provide informative chunk-names to all your R chunks, and automatically generate a timestamp to show when the document was last updated. (Hint: check the Rmarkdown episode in our Data Carpentry tutorial)
+
+I changed my header to be as follows: 
+title: "Homework Week 47"
+author: "Asger Kammer Pedersen"
+date: " 2021/11/30"
+output: 
+  html_document:
+      toc: TRUE
+      toc_float: TRUE
+
+## Task 6
+6) Fill in the empty code chunk with a ggplot of your Danish kings: loading the data, calculating the mid-year, and plotting the duration of reign (y axis) over the mid-year  (x axis), using geom_smooth()
+
+The code for how i created it is as follows: 
+
+kings <- read_csv("./Data/Exerxice-1-Ark1.csv")
+kings$Duration <- kings$End_of_Reign-kings$Beginning_of_Reign
+kings[30,1:6]
+kings1 <- kings[-c(30,40),]
+
+mean(kings1$Duration,na.rm=T)
+class(kings1$Duration)
+
+
+kings1 <- kings1 %>% 
+  mutate(midyear = Beginning_of_Reign -(Beginning_of_Reign-End_of_Reign)/2)
+  
+I did this so I would have both midyear and duration in my .csv file
+
+ggplot(kings1, aes(x=midyear,y=Duration))+
+  geom_point()+
+  geom_smooth()+
+  labs(title = "Duration avg. of rule for danish kigns",
+       x="Mid-Year",y="Duration")+
+  theme_bw()+
+  theme(text = element_text(size=16))
+  
+Then i did this to create a ggplot with the desired data.
+I took added in geom_point extra accesibility. 
+
+## Task7
+7) Comment briefly what is your opinion on the basis of the data visualisations: are we more civilized today?
+If we only base our level of civilization on homicide rates, then I would say yes, but it is an over all pretty hollow argument. What I am saying is that there has to be more to it than that. 
